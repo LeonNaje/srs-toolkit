@@ -1,137 +1,105 @@
-# srs-toolkit
+# Ton appli de révision perso — le guide sans prise de tête
 
-Kit de 3 prompts pour te construire un outil de révision espacée (SRS) à
-partir du sommaire de n'importe quelle formation en ligne à laquelle tu es
-inscrit·e, avec ton propre accès personnel.
+Tu n'as jamais codé, jamais utilisé Claude, jamais rien "construit" ? Aucun
+souci, ce guide est fait pour toi. 10 minutes, deux copier-coller, et t'as
+ton appli de révision.
 
----
+## Ce que tu vas obtenir
 
-## 1. Extraire le sommaire de ta formation (Claude in Chrome)
+Une appli qui te montre chaque jour les leçons à réviser, te demande "tu t'en
+souviens ?", et espace automatiquement les révisions dans le temps (les
+leçons difficiles reviennent plus souvent, les faciles moins). C'est la
+méthode utilisée par des applis comme Anki, en version faite pour *ta*
+formation.
 
-À exécuter sur **ton** compte, **ton** navigateur, **ta** session connectée
-à ta plateforme de formation.
+**Et oui, ça marche sur tous tes appareils, sans rien faire de plus.** Tu
+révises sur ton téléphone dans le métro, tu retrouves exactement la même
+progression le soir sur ton ordi. Pas de clé USB, pas de fichier à
+transférer, pas de manip bizarre — ça se synchronise tout seul, en arrière
+plan, parce que l'appli est liée à ton compte Claude (pas à un appareil en
+particulier). "Cross-device", ça veut juste dire ça : plusieurs appareils,
+une seule progression.
 
-```
-Je suis connecté sur Chrome à mon compte sur ma plateforme de formation en
-ligne. Je veux extraire, pour mon usage strictement personnel, la structure
-de mon programme.
+## Ce qu'il te faut avant de commencer
 
-1. Va sur l'espace membre de ma formation (précise l'URL de la page d'accueil
-   de mon programme si tu la connais, sinon demande-la moi).
-2. Pour chaque chapitre et chaque leçon qu'il contient, relève :
-   - le nom du chapitre
-   - le titre exact de la leçon (copie-le tel quel, ne reformule pas)
-   - son type si identifiable : théorie/cours, exercice/mise en pratique,
-     quiz, projet fil rouge, ressource, ou simple note/transition
-   - l'URL complète de l'élément
-   - si elle est déjà marquée comme terminée par moi
-3. Restitue uniquement un JSON dans ce format exact, rien d'autre en sortie :
+- Un compte Claude — sur [claude.ai](https://claude.ai). **Attention** :
+  l'étape 1 (extraction automatique) demande un abonnement payant (Pro, Max
+  ou Team) — l'extension "Claude in Chrome" n'est pas ouverte aux comptes
+  gratuits pour l'instant. Si t'es en gratuit, deux options : demander à un
+  camarade abonné de faire cette étape pour toi (le résultat, le JSON, se
+  copie-colle ensuite chez toi sans problème), ou faire l'étape 1 à la main
+  (copier les titres de leçons toi-même dans le format demandé, plus long
+  mais gratuit).
+- L'extension **Claude in Chrome** installée (cherche "Claude in Chrome"
+  dans le Chrome Web Store) — uniquement sur **Chrome, sur ordinateur**
+  pour le moment, pas sur mobile.
+- Être connecté·e à ta plateforme de formation dans Chrome (login fait, tu
+  dois voir tes cours quand tu ouvres le site)
 
-[
-  {"c": "Nom du chapitre", "items": [
-    {"t": "Titre exact", "ty": "L|E|Q|F|R|N", "d": 0, "u": "URL complète"}
-  ]}
-]
+## Étape 1 — Récupérer le contenu de ta formation
 
-où ty = L (théorie), E (exercice), Q (quiz), F (fil rouge), R (ressource),
-N (note sans contenu pédagogique) ; d = 1 si déjà terminée, sinon 0.
+1. Ouvre Chrome, connecte-toi à ta plateforme de formation.
+2. Clique sur l'icône Claude dans Chrome (en haut à droite du navigateur).
+3. Colle ce texte tel quel (remplace juste `[coller le prompt 1 ici]` par le
+   contenu du fichier `README-srs-toolkit.md`, section 1) :
 
-Rappel : contenu à usage strictement personnel (accès payant légitime),
-ne jamais le partager avec un tiers ni le publier.
-```
+   *(Le prompt exact est dans le fichier `README-srs-toolkit.md` fourni à
+   côté — copie tout le bloc de code sous "1. Extraire le sommaire".)*
 
----
+4. Appuie sur Entrée. Claude va parcourir ta formation tout seul, ça prend
+   entre 1 et 5 minutes selon le nombre de leçons. Ne ferme pas l'onglet.
+5. À la fin, Claude t'affiche un gros bloc de texte qui commence par `[` et
+   finit par `]`. C'est normal, c'est le "sommaire" de ta formation dans un
+   format que l'ordinateur comprend. **Copie tout ce bloc** (sélectionne
+   tout, Ctrl+C ou Cmd+C).
 
-## 2. Construire l'artefact Claude (avec synchro cross-device)
+## Étape 2 — Construire ton appli
 
-```
-Voici le JSON du sommaire de ma formation (format ci-dessous), obtenu par
-mon propre accès personnel — garde-le uniquement dans le fichier que tu me
-donnes, ne le republie nulle part d'autre :
+1. Ouvre un nouvel onglet sur [claude.ai](https://claude.ai) (le site normal,
+   pas l'extension Chrome).
+2. Colle le **prompt 2** du fichier `README-srs-toolkit.md`, puis colle à la
+   suite le texte que tu as copié à l'étape précédente (le bloc qui commence
+   par `[`).
+3. Envoie le message. Claude va construire ton appli — ça prend 1 à 3
+   minutes. Tu vas le voir écrire du code, c'est normal, laisse-le faire.
+4. À la fin, un lien ou un bouton apparaît pour ouvrir ton appli. Clique
+   dessus.
 
-[coller le JSON ici]
+**C'est tout. Ton appli existe.**
 
-Construis-moi une appli web de révision espacée (SRS), publiée comme
-artefact Claude, avec :
-- Deux modes au choix : Leitner (5 boîtes, intervalles 1/2/4/7/14 jours) et
-  SM-2 façon Anki (ease factor, boutons Again/Hard/Good/Easy).
-- Une file de révision du jour tirée des cartes dues, avec notation du rappel.
-- Titre de leçon cliquable → ouvre l'URL d'origine dans un nouvel onglet.
-- Liste par chapitre avec barre de progression et bouton "Apprise" pour
-  activer une carte pas encore commencée.
-- Synchronisation automatique de ma progression entre mes appareils : utilise
-  la capability `db` de l'artefact (capabilities: {db:{}}), avec un document
-  par carte dans une collection "cards", mis à jour à chaque notation et
-  suivi en temps réel via onSnapshot. Prévois un repli local (localStorage)
-  si le stockage partagé est indisponible, pour que l'app ne soit jamais vide.
-- Export/import JSON en secours manuel, en plus de la synchro automatique.
-- Thème sombre/clair automatique, sobre et lisible.
-```
+## Étape 3 — L'utiliser sur ton téléphone aussi
 
-⚠️ La synchro cross-device via `db` ne fonctionne qu'à l'intérieur de **ton
-propre compte/organisation Claude** — un artefact déclarant `db` ne peut pas
-être partagé publiquement avec des tiers en gardant cette fonctionnalité
-active pour eux.
+1. Sur ton téléphone, installe l'appli **Claude** (App Store / Play Store),
+   connecte-toi avec le **même compte** que sur ton ordi.
+2. Retourne dans ta conversation où tu as créé l'appli (elle est dans ton
+   historique de conversations Claude).
+3. Rouvre le lien de ton appli. Elle s'affiche pareil, avec la même
+   progression — même si tu n'as encore rien fait dessus sur ton téléphone.
 
----
+Tu peux répéter cette étape sur autant d'appareils que tu veux (tablette,
+ordi du bureau, etc.), tant que c'est le même compte Claude.
 
-## 3. Alternative — Airtable + Softr
+## Comment s'en servir au quotidien
 
-```
-J'ai un JSON décrivant le sommaire de ma formation (même format que
-ci-dessus). Aide-moi à construire un système de révision espacée avec
-Airtable + Softr :
+- Ouvre l'appli, elle te montre directement la carte du jour.
+- Tu essaies de te souvenir de ce que couvrait la leçon, *avant* de cliquer
+  sur un bouton.
+- Tu cliques "Su" si tu t'en souvenais, "Pas su" sinon. L'appli calcule
+  toute seule quand te la reproposer.
+- Pas de carte affichée ? C'est que t'as tout révisé pour aujourd'hui. 🎉
+- Pour ajouter une nouvelle leçon à réviser (quand tu l'as terminée dans ta
+  formation), va dans la liste par chapitre en bas et clique "✓ Apprise".
 
-1. Dans Airtable, crée une base avec une table "Lecons" : Chapitre (texte),
-   Titre (texte), Type (sélection unique : Théorie/Exercice/Quiz/Fil
-   rouge/Ressource/Note), URL (lien), Statut (sélection : À apprendre/
-   Apprise), Boîte Leitner (nombre, 1 à 5), Prochaine révision (date).
-   Explique-moi comment importer mon JSON dans cette table.
-2. Donne-moi, étape par étape, comment construire dans Softr :
-   - une vue "Aujourd'hui" filtrée sur Prochaine révision <= aujourd'hui
-   - un bouton "Su / Pas su" qui met à jour Boîte Leitner et Prochaine
-     révision selon la logique 1/2/4/7/14 jours
-   - une vue par chapitre avec barre de progression
-3. Précise bien les endroits où je dois cliquer dans Softr, puisque tu n'as
-   pas d'accès direct à l'outil.
-```
+## Si ça bloque
 
----
-
-## Manuel d'utilisation de l'appli générée
-
-- **Deux modes** en haut à droite : *Leitner* (5 boîtes, intervalle fixe par
-  boîte) ou *SM-2* (intervalle qui s'ajuste à ta difficulté ressentie via
-  4 boutons : Again / Hard / Good / Easy). Le choix de mode reste propre à
-  chaque appareil, il n'est pas synchronisé.
-- **Session du jour** : la carte affichée est celle qui est due. Note ton
-  rappel ; la carte suivante due apparaît automatiquement.
-- **À apprendre** : liste par chapitre. Clique sur "✓ Apprise" pour activer
-  une carte pas encore intégrée à la révision.
-- **Export / Import** : bouton en bas de page. Utile en secours si jamais la
-  synchro automatique est indisponible, ou pour garder une sauvegarde locale.
-- **Réinitialiser** : remet toute la progression à zéro (irréversible),
-  demande confirmation.
-
----
-
-## ⚠️ Avant de diffuser le contenu généré
-
-Le JSON produit à l'étape 1 et l'artefact/l'appli remplie à l'étape 2 ou 3
-contiennent le sommaire réel de *ta* formation — titres, structure, liens.
-Ce contenu appartient à l'organisme qui édite la formation, pas à toi : la
-plupart des CGU de plateformes de formation en ligne interdisent la
-reproduction ou la diffusion de leur contenu pédagogique à des tiers, même à
-des camarades de promo déjà inscrits. Par exemple, le simple sommaire des
-leçons (titres et structure, sans même le contenu des vidéos) suffit déjà à
-tomber sous ce type de clause.
-
-Avant de partager quoi que ce soit de rempli avec quelqu'un d'autre :
-- Relis les CGU/CGV de ta propre formation (souvent une clause "propriété
-  intellectuelle" et une clause "comportements interdits").
-- Si tu veux partager l'outil avec d'autres, donne-leur seulement les 3
-  prompts ci-dessus (ils ne contiennent aucun contenu protégé) pour qu'ils
-  se construisent leur propre version avec leur propre accès — plutôt que de
-  leur transmettre ton JSON ou ton artefact rempli.
-- Pour diffuser une version remplie telle quelle, obtiens une autorisation
-  écrite de l'organisme de formation au préalable.
+- **"Claude in Chrome" n'apparaît pas / n'est pas utilisable** → vérifie
+  que tu es sur un abonnement payant (Pro, Max ou Team) — c'est requis pour
+  cette extension depuis son ouverture officielle fin août 2026, les comptes
+  gratuits n'y ont pas accès. Solution de secours : demande à un·e
+  camarade abonné·e de te faire l'étape 1, ou fais-la à la main.
+- **Le prompt 1 renvoie une erreur ou un texte bizarre** → redonne à Claude
+  l'URL exacte de la page d'accueil de ta formation, il te la redemandera
+  probablement de toute façon.
+- **Rien ne se synchronise entre mes appareils** → vérifie que c'est bien le
+  **même compte Claude** connecté partout (pas juste le même email, le même
+  login utilisé pour se connecter).
